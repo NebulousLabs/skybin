@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>SkyBin | Decentralized Pastebin powered by Sia Skynet</title>
+
+    <script>
+      function save() {
+        var snippet = document.getElementById("snippet").value
+        var button = document.getElementById("save-trigger")
+
+        button.classList.add("loading")
+        var blob = new Blob(
+          [
+            "<html><head><title>Welcome To Skybin</title><head><body><pre>" +
+              snippet +
+              "</pre></body></html>"
+          ],
+          { type: "text/html" }
+        )
+        var formData = new FormData()
+        formData.append("file", blob)
+
+        fetch("/api/skyfile?filename=skybin.html", {
+          method: "POST",
+          body: formData
+        })
+          .then(response => response.json())
+          .then(result => {
+            button.classList.remove("loading")
+            alert(window.location.hostname + "/" + result.skylink)
+          })
+          .catch(error => {
+            button.classList.remove("loading")
+            console.error("Error:", error)
+          })
+      }
+    </script>
+
+    <style type="text/css">
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+          "Segoe UI Symbol";
+        color: #4a5568;
+        background-color: #fff;
+      }
+      h1 {
+        font-size: 48px;
+        font-weight: 500;
+        margin-top: 40px;
+        margin-bottom: 10px;
+      }
+
+      .lead {
+        padding: 20px 0;
+        font-size: 18px;
+        font-weight: 500;
+        max-width: 330px;
+        line-height: 1.4;
+        text-align: center;
+      }
+
+      .wrapper {
+        display: flex;
+        height: calc(100vh - 40px);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .caps {
+        font-size: 14px;
+        font-weight: 600;
+        text-transform: uppercase;
+        color: #57b560;
+      }
+
+      .snippet-wrapper {
+        margin-top: 20px;
+        background: #ffffff;
+        box-shadow: 20px 20px 60px #cfcfcf, -20px -20px 60px #ffffff;
+        overflow: hidden;
+        border-radius: 20px;
+      }
+      #snippet {
+        padding: 40px;
+        border: none;
+        background: transparent;
+      }
+
+      .cta {
+        margin-top: 40px;
+      }
+
+      .btn {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        padding: 20px 40px;
+        background: #57b560;
+        border: none;
+        color: white;
+        font-size: 16px;
+        border-radius: 8px;
+        font-weight: 600;
+      }
+
+      .btn:hover {
+        background: #59ad61;
+      }
+
+      .btn:active {
+        background: #57b560;
+      }
+
+      .btn > svg {
+        padding-right: 8px;
+      }
+
+      .loading {
+        background: gray !important;
+        cursor: not-allowed;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <h1>skybin</h1>
+      <span class="caps">Pastebin, Decentralized & Encrypted.</span>
+      <h2 class="lead">
+        Paste your snippet into the area below and hit "Save" to upload it to
+        Skynet.
+      </h2>
+
+      <div class="snippet-wrapper">
+        <textarea
+          id="snippet"
+          rows="20"
+          cols="80"
+          placeholder="Paste your snippet here"
+        ></textarea>
+      </div>
+      <br />
+      <div class="cta">
+        <button id="save-trigger" class="btn" type="button" onclick="save()">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+          >
+            <title>web-hyperlink</title>
+            <g fill="#ffffff">
+              <path
+                d="M13,5.142v2.136C13.595,7.625,14,8.263,14,9v2c0,1.103-0.897,2-2,2H8c-1.103,0-2-0.897-2-2V9 c0-1.103,0.897-2,2-2h1V5H8C5.794,5,4,6.794,4,9v2c0,2.206,1.794,4,4,4h4c2.206,0,4-1.794,4-4V9C16,7.141,14.721,5.589,13,5.142z"
+              ></path>
+              <path
+                fill="#ffffff"
+                d="M8,1H4C1.794,1,0,2.794,0,5v2c0,1.859,1.279,3.411,3,3.858V8.722C2.405,8.375,2,7.737,2,7V5 c0-1.103,0.897-2,2-2h4c1.103,0,2,0.897,2,2v2c0,1.103-0.897,2-2,2H7v2h1c2.206,0,4-1.794,4-4V5C12,2.794,10.206,1,8,1z"
+              ></path>
+            </g>
+          </svg>
+          Generate Skynet Link
+        </button>
+      </div>
+      <span style="margin-top: auto;" class="caps">Powered by Sia Skynet</span>
+    </div>
+  </body>
+</html>
