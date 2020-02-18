@@ -6,6 +6,15 @@
   <title>SkyBin | Decentralized Pastebin powered by Sia Skynet</title>
 
   <script>
+    function generateUUID() {
+      let uuid = ''
+      const cs = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      for (let i = 0; i < 16; i++) {
+        uuid += cs.charAt(Math.floor(Math.random() * cs.length));
+      }
+      return uuid;
+    }
+
     function save() {
       var snippet = document.getElementById("snippet").value
       var button = document.getElementById("save-trigger")
@@ -30,21 +39,20 @@
         .then(response => response.json())
         .then(result => {
           button.classList.remove("loading")
-          alert(window.location.hostname + "/" + result.skylink)
+          var newLink = document.createElement("a")
+          newLink.href = result.skylink
+          newLink.classList.add("skylink")
+          newLink.setAttribute("target", "_blank")
+          newLink.textContent =
+            "https://" + window.location.hostname + "/" + result.skylink
+          document.getElementById("skylinks").appendChild(newLink)
+          var linkBreak = document.createElement("br")
+          document.getElementById("skylinks").appendChild(linkBreak)
         })
         .catch(error => {
           button.classList.remove("loading")
           console.error("Error:", error)
         })
-    }
-
-    function generateUUID() {
-      let uuid = ''
-      const cs = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-      for (let i = 0; i < 16; i++) {
-        uuid += cs.charAt(Math.floor(Math.random() * cs.length));
-      }
-      return uuid;
     }
   </script>
 
@@ -135,13 +143,24 @@
       background: gray !important;
       cursor: not-allowed;
     }
+
+    #skylinks {
+      padding-top: 40px;
+    }
+
+    #skylinks>a {
+      padding-top: 20px;
+      display: block;
+      color: #4a5568;
+      font-size: 18px;
+    }
   </style>
 </head>
 
 <body>
   <div class="wrapper">
     <h1>skybin</h1>
-    <span class="caps">Pastebin, Decentralized & Encrypted.</span>
+    <span class="caps">Pastebin, Decentralized &amp; Encrypted.</span>
     <h2 class="lead">
       Paste your snippet into the area below and hit "Save" to upload it to
       Skynet.
@@ -153,7 +172,7 @@
     <br />
     <div class="cta">
       <button id="save-trigger" class="btn" type="button" onclick="save()">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+        <svg width="16" height="16" viewBox="0 0 16 16">
           <title>web-hyperlink</title>
           <g fill="#ffffff">
             <path
@@ -167,6 +186,8 @@
         Generate Skynet Link
       </button>
     </div>
+    <div id="skylinks"></div>
+
     <span style="margin-top: auto;" class="caps">Powered by Sia Skynet</span>
   </div>
 </body>
