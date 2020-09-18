@@ -40,7 +40,7 @@
         .then(result => {
           button.classList.remove("loading")
           var newLink = document.createElement("a")
-          newLink.href = result.skylink
+          newLink.href = `/${result.skylink}`
           newLink.classList.add("skylink")
           newLink.setAttribute("target", "_blank")
           newLink.textContent =
