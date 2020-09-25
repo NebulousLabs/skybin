@@ -39,12 +39,14 @@
         .then(response => response.json())
         .then(result => {
           button.classList.remove("loading")
+
+          const parts = window.location.hostname.split('.');
+          const domain = parts.slice(-2).join('.');
           var newLink = document.createElement("a")
-          newLink.href = `/${result.skylink}`
+          newLink.href = `https://${domain}/${result.skylink}`
           newLink.classList.add("skylink")
           newLink.setAttribute("target", "_blank")
-          newLink.textContent =
-            "https://" + window.location.hostname + "/" + result.skylink
+          newLink.textContent = newLink.href;
           document.getElementById("skylinks").appendChild(newLink)
           var linkBreak = document.createElement("br")
           document.getElementById("skylinks").appendChild(linkBreak)
