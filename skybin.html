@@ -23,7 +23,7 @@
       var blob = new Blob(
         [
           "<html><head><title>Welcome To Skybin</title><head><body><pre>" +
-          snippet +
+          snippet.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") +
           "</pre></body></html>"
         ],
         { type: "text/html" }
