@@ -22,8 +22,13 @@
       button.classList.add("loading")
       var blob = new Blob(
         [
-          "<html><head><title>Welcome To Skybin</title><head><body><pre>" +
-          snippet +
+          "<html><head>" +
+          '<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>' +
+          "<title>Welcome To Skybin</title></head><body><pre>" +
+          // Escape HTML entities, including unicode and tags.
+          snippet.replace(/[\u00A0-\u9999<>\&]/g, function(i) {
+            return '&#'+i.charCodeAt(0)+';';
+          }) +
           "</pre></body></html>"
         ],
         { type: "text/html" }
